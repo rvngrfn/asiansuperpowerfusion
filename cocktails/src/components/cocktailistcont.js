@@ -3,12 +3,9 @@ import CocktailList from './cocktailist'
 import { connect } from 'react-redux'
 
 class CocktailListCont extends React.PureComponent {
-  selectCocktail(id) {
-    console.log('selected cocktail', id)
-    this.props.dispatch({
-      type: 'SELECT_COCK',
-      payload: id
-    })
+  //you need to use arrow function to access 'this' with onClick of the cocktail list component
+  selectCocktail = id => {
+    this.props.selectCocktail(id)
   }
 
   render() {
@@ -33,4 +30,15 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(CocktailListCont)
+const mapActionToProps = dispatch => ({
+  selectCocktail: id =>
+    dispatch({
+      type: 'SELECT_COCK',
+      payload: id
+    })
+})
+
+export default connect(
+  mapStateToProps,
+  mapActionToProps
+)(CocktailListCont)
