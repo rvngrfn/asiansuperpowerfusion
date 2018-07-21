@@ -3,23 +3,42 @@ import CocktailList from './cocktailist'
 import { connect } from 'react-redux'
 
 class CocktailListCont extends React.PureComponent {
-  // selectCocktail(id){
-  //   console.log('selected cocktail', id)
-  //   this.props.dispatch({
-  //     type: 'SELECT_COCK',
-  //     payload: id
-  //   })
-  // }
+  //you need to use arrow function to access 'this' with onClick of the cocktail list component
+  selectCocktail = id => {
+    this.props.selectCocktail(id)
+  }
 
-  render(){
-    return <CocktailList categories={this.props.categories}/> //selectCocktail = {this.selectCocktail} />
+  render() {
+    // you get cocktails data, instead of categories. the name categories is a bit confusing.
+    // return <CocktailList categories={this.props.cocktails} />
+
+    return <CocktailList cocktails={this.props.cocktails} selectCocktail={this.selectCocktail} />
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    categories: state.category
+    // you name the reducer cocktails. need to use the name here.
+    // in reducers/index.js...
+
+    // combineReducers({
+    //   cocktails: cocktails
+    // })
+
+    // state = state of the reducer. in this case, cocktails
+    cocktails: state.cocktails
   }
 }
 
-export default connect(mapStateToProps)(CocktailListCont)
+const mapActionToProps = dispatch => ({
+  selectCocktail: id =>
+    dispatch({
+      type: 'SELECT_COCK',
+      payload: id
+    })
+})
+
+export default connect(
+  mapStateToProps,
+  mapActionToProps
+)(CocktailListCont)
